@@ -17,9 +17,9 @@ class CreateCustomerTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('company_id', false, true);
             $table->string('name');
+            $table->bigInteger('random_number');
             $table->timestamps();
             $table->softDeletes();
-            $table->bigInteger('random_number');
         });
     }
 

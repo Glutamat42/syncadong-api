@@ -11,12 +11,16 @@ use Illuminate\Http\Request;
  *
  * APIs for managing customers
  */
-
 class CustomerController extends Controller
 {
     public function getCustomers(Request $request)
     {
-        return response()->json(Customer::all());
+        return response()->json(Customer::all(), 200);
+    }
+
+    public function getCustomer(int $customer_id, Request $request)
+    {
+        return response()->json(Customer::query()->where('id', $customer_id)->first(), 200);
     }
 
     public function createCustomer(Request $request)
@@ -58,11 +62,12 @@ class CustomerController extends Controller
         return response(['status' => 'customer deleted', 'id' => $customer->id], 200);
     }
 
-    public function getTransactionLog(Request $request) {
+    public function getTransactionLog(Request $request)
+    {
         $startDate = Carbon::create($request->query('start_date'));
-        $created = Customer::query()->whereDate('created_at', '>', $startDate)->get()->pluck('id');
-        $updated = Customer::query()->whereDate('updated_at', '>', $startDate)->whereDate('updated_at', '!=', 'created_at')->get()->pluck('id');
-        $deleted = Customer::query()->whereNotNull('deleted_at')->whereDate('deleted_at', '>', $startDate)->get()->pluck('id';
+        $created = Customer::query()->whereDate('created_at', '>', $startDate)->select('id', 'created_at')->get()->toArray();
+        $updated = Customer::query()->whereDate('updated_at', '>', $startDate)->whereColumn('updated_at', '!=', 'created_at')->select('id', 'updated_at')->get()->toArray();
+        $deleted = Customer::query()->whereNotNull('deleted_at')->whereDate('deleted_at', '>', $startDate)->select('id', 'deleted_at')->get()->toArray();
         return response(['created' => $created, 'updated' => $updated, 'deleted' => $deleted], 200);
     }
 }

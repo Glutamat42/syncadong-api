@@ -7,6 +7,7 @@ $router->get('/', function () use ($router) {
     //Customers
 $router->GET('/customers/transactions', 'CustomerController@getTransactionLog');
 $router->GET('/customers', 'CustomerController@getCustomers');
+$router->GET('/customer/{customer_id}', 'CustomerController@getCustomer');
 $router->POST('/customers', 'CustomerController@createCustomer');
 $router->PUT('/customers', 'CustomerController@updateCustomer');
 $router->DELETE('/customers/{customer_id}', 'CustomerController@deleteCustomer');
