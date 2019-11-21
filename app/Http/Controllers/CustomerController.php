@@ -52,14 +52,14 @@ class CustomerController extends Controller
 
     public function deleteCustomer(int $customer_id, Request $request)
     {
-        $customer = Customer::query()->where('id', $request->id);
+        $customer = Customer::query()->where('id', $customer_id);
         if (empty($customer)) {
             return response(['status' => 'customer not found'], 404);
         }
 
         $customer->delete();
 
-        return response(['status' => 'customer deleted', 'id' => $customer->id], 200);
+        return response(['status' => 'customer deleted', 'id' => $customer_id], 200);
     }
 
     public function getTransactionLog(Request $request)
