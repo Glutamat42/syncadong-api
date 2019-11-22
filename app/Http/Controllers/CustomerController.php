@@ -67,7 +67,7 @@ class CustomerController extends Controller
         $startDate = Carbon::create($request->query('start_date'));
         $created = Customer::query()->whereDate('created_at', '>', $startDate)->select('id', 'created_at')->get()->toArray();
         $updated = Customer::query()->whereDate('updated_at', '>', $startDate)->whereColumn('updated_at', '!=', 'created_at')->select('id', 'updated_at')->get()->toArray();
-        $deleted = Customer::query()->whereNotNull('deleted_at')->whereDate('deleted_at', '>', $startDate)->select('id', 'deleted_at')->get()->toArray();
+        $deleted = Customer::onlyTrashed()->whereDate('deleted_at', '>', $startDate)->select('id', 'deleted_at')->get()->makeVisible(['deleted_at'])->toArray();
         return response(['created' => $created, 'updated' => $updated, 'deleted' => $deleted], 200);
     }
 }
